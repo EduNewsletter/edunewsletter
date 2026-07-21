@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "newsletter": "edu",
+  "issueNumber": 1,
+  "title": "EduNewsletter #1",
+  "subject": "Neue Bildungsartikel und Entwicklungen",
+  "slug": "edunewsletter-1",
+  "intro": "Diese Ausgabe bündelt aktuelle Beiträge, Studien und Nachrichten aus dem Bildungsbereich.",
+  "closing": "Danke fürs Lesen. Die nächste kuratierte Ausgabe folgt in Kürze.",
+  "publicationDate": "2026-07-21",
+  "ghostTags": ["EduNewsletter"],
+  "entries": [
+    {
+      "section": "news",
+      "title": "Beispiel für eine Bildungsnachricht",
+      "url": "https://example.org/bildungsnachricht",
+      "source": "Beispielquelle",
+      "publishedAt": "2026-07-20",
+      "summary": "Diese Beispielzusammenfassung zeigt, wie eine Bildungsnachricht knapp, sachlich und ohne erfundene Aussagen beschrieben wird.",
+      "relevance": "Der Beitrag berührt aktuelle Fragen der Schul- und Unterrichtsentwicklung.",
+      "tags": ["Schulentwicklung", "Bildungspolitik"]
+    }
+  ]
+}

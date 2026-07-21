@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "newsletter": "material",
+  "issueNumber": 1,
+  "title": "MaterialNewsletter #1",
+  "subject": "Neue Unterrichtsmaterialien",
+  "slug": "materialnewsletter-1",
+  "intro": "Diese Ausgabe sammelt neue und direkt einsetzbare Unterrichtsmaterialien.",
+  "closing": "Viel Freude beim Ausprobieren und beim Einsatz der Materialien im Unterricht.",
+  "publicationDate": "2026-07-21",
+  "ghostTags": ["MaterialNewsletter"],
+  "entries": [
+    {
+      "section": "teaching-material",
+      "title": "Beispiel für ein Unterrichtsmaterial",
+      "url": "https://example.org/unterrichtsmaterial",
+      "source": "Beispielplattform",
+      "publishedAt": "2026-07-20",
+      "summary": "Das Beispielmaterial enthält eine strukturierte Unterrichtsidee und zeigt die erforderlichen Metadaten für den MaterialNewsletter.",
+      "relevance": "Das Material kann unmittelbar in einer Unterrichtseinheit eingesetzt werden.",
+      "tags": ["Unterrichtsmaterial", "Medienbildung"],
+      "material": {
+        "subjects": ["Fächerübergreifend"],
+        "gradeLevels": ["Sekundarstufe I"],
+        "materialType": "Unterrichtseinheit",
+        "license": "CC BY 4.0",
+        "access": "free",
+        "loginRequired": false
+      }
+    }
+  ]
+}

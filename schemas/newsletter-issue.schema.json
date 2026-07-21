@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edunewsletter.de/schemas/newsletter-issue.schema.json",
+  "title": "EduNewsletter issue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "newsletter",
+    "issueNumber",
+    "title",
+    "subject",
+    "intro",
+    "closing",
+    "publicationDate",
+    "entries"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "newsletter": { "enum": ["edu", "material"] },
+    "issueNumber": { "type": "integer", "minimum": 1 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "subject": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 191
+    },
+    "intro": { "type": "string", "minLength": 1, "maxLength": 1200 },
+    "closing": { "type": "string", "minLength": 1, "maxLength": 800 },
+    "publicationDate": { "type": "string", "format": "date" },
+    "ghostTags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 191 },
+      "uniqueItems": true,
+      "maxItems": 10
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "section",
+        "title",
+        "url",
+        "source",
+        "publishedAt",
+        "summary",
+        "relevance",
+        "tags"
+      ],
+      "properties": {
+        "section": {
+          "enum": [
+            "news",
+            "studies",
+            "blogs",
+            "short",
+            "teaching-material",
+            "oer",
+            "tools",
+            "collections"
+          ]
+        },
+        "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "publishedAt": { "type": "string", "format": "date" },
+        "summary": { "type": "string", "minLength": 30, "maxLength": 1200 },
+        "relevance": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "uniqueItems": true,
+          "maxItems": 12
+        },
+        "image": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["url", "alt"],
+          "properties": {
+            "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+            "alt": { "type": "string", "minLength": 1, "maxLength": 500 },
+            "caption": { "type": "string", "maxLength": 500 }
+          }
+        },
+        "material": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "subjects",
+            "gradeLevels",
+            "materialType",
+            "license",
+            "access",
+            "loginRequired"
+          ],
+          "properties": {
+            "subjects": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1, "maxLength": 80 },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "gradeLevels": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1, "maxLength": 80 },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "materialType": { "type": "string", "minLength": 1, "maxLength": 120 },
+            "license": { "type": "string", "minLength": 1, "maxLength": 120 },
+            "access": { "enum": ["free", "paid", "freemium", "unknown"] },
+            "loginRequired": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "newsletter": { "const": "edu" } } },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "properties": {
+                "section": { "enum": ["news", "studies", "blogs", "short"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "newsletter": { "const": "material" } } },
+      "then": {
+        "properties": {
+          "entries": {
+            "items": {
+              "required": ["material"],
+              "properties": {
+                "section": {
+                  "enum": ["teaching-material", "oer", "tools", "collections"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

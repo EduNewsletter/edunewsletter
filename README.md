@@ -1,42 +1,62 @@
-# [Name des Newsletters]
+# EduNewsletter
 
-> Ein kostenloser Newsletter, der aktuelle Fachartikel, digitale Unterrichtsmaterialien und relevante Informationen für Lehrkräfte bündelt.
+EduNewsletter kuratiert Bildungsmedien in zwei getrennten Ausgaben:
 
-Dieses Repository enthält das Archiv aller versendeten Ausgaben. Die Inhalte sind sowohl hier als auch auf der Website [Link zur Website] frei zugänglich.
+- **EduNewsletter**: Blogposts, Fachartikel, Studien und Bildungsnachrichten
+- **MaterialNewsletter**: Unterrichtsmaterialien, OER, Aufgaben und digitale Werkzeuge
 
----
+Vorgelagerte KI-Agenten liefern ausschließlich strukturierte Ausgabedaten. Dieses Repository validiert diese Daten, rendert daraus Ghost-kompatibles HTML sowie ein Markdown-Archiv und kann einen **Entwurf** in Ghost anlegen. Versand und Veröffentlichung bleiben bis zur redaktionellen Freigabe in Ghost manuell.
 
-## Inhaltsverzeichnis
-* [Über das Projekt](#über-das-projekt)
-* [Nutzen für Lehrkräfte](#nutzen-für-lehrkräfte)
-* [KI-Transparenzerklärung](#ki-transparenzerklärung)
-* [Nutzung und Abonnement](#nutzung-und-abonnement)
-* [Mitwirken](#mitwirken)
-* [Lizenz](#lizenz)
+## Struktur
 
----
+```text
+schemas/                 JSON-Schema für Agenten-Ausgaben
+templates/               Ghost-kompatible HTML-Hüllen
+examples/                valide Beispielausgaben
+scripts/                 Validierung, Rendering und Draft-Erstellung
+archive/edu/             Markdown-Archiv des EduNewsletter
+archive/material/        Markdown-Archiv des MaterialNewsletter
+docs/                    Agentenvertrag und Publishing-Workflow
+```
 
-## Über das Projekt
-Lehrkräfte stehen vor der Herausforderung, digitale Materialien und aktuelle Informationen zeiteffizient für den Unterricht zu finden. Dieses Projekt aggregiert relevante Quellen, strukturiert die Daten und stellt sie zentral zur Verfügung.
+## Lokale Verwendung
 
-## Nutzen für Lehrkräfte
-* **Zeitersparnis:** Reduziert den täglichen Rechercheaufwand für die Unterrichtsvorbereitung.
-* **Praxisbezug:** Fokus auf direkt einsetzbaren Lehr- und Lernmaterialien sowie aktuellen Fachinformationen.
-* **Dauerhafter Zugriff:** Alle Newsletter-Ausgaben bleiben im Ordner `/archiv` als Markdown-Dateien dauerhaft durchsuchbar und frei verfügbar.
+Voraussetzung: Node.js 22 oder neuer.
 
-## KI-Transparenzerklärung
-Dieses Projekt nutzt Künstliche Intelligenz (KI) zur Unterstützung bei der Datenerfassung und -strukturierung. 
+```bash
+npm run verify
+node scripts/validate-issue.mjs examples/edu-example.json
+node scripts/render-issue.mjs examples/edu-example.json --html /tmp/edu.html --markdown /tmp/edu.md
+```
 
-* **Automatisierte Vorarbeit:** Die Vorab-Recherche, das Auslesen von RSS-Feeds und das erste Strukturieren der Rohdaten erfolgen KI-gestützt.
-* **Redaktionelle Prüfung:** Alle Inhalte werden vor dem Versand manuell geprüft, korrigiert und redigiert. Es erfolgt keine ungeprüfte Veröffentlichung.
-* **Quellenangaben:** Die verwendeten Originalquellen werden in jeder Ausgabe transparent genannt.
+## Ghost-Entwurf erstellen
 
-## Nutzung und Abonnement
-* **Per E-Mail:** Anmeldung auf [Link zur Website] für den regelmäßigen Erhalt.
-* **Über GitHub:** Direkter Zugriff auf alle Markdown-Dateien in diesem Repository.
+Die Zugangsdaten werden nur über Umgebungsvariablen eingelesen:
 
-## Mitwirken
-Hinweise auf Fehler oder Ergänzungen können direkt über die *Issues* gemeldet werden. Vorschläge für neue Unterrichtsmaterialien und Quellen sind willkommen.
+```bash
+GHOST_ADMIN_API_URL=https://edunewsletter.de \
+GHOST_ADMIN_API_KEY=... \
+node scripts/create-ghost-draft.mjs examples/edu-example.json
+```
 
-## Lizenz
-Die Inhalte dieses Repositories stehen unter der [z. B. CC BY 4.0] Lizenz.
+Der Publisher erzwingt `status: draft`. Er kann weder veröffentlichen noch E-Mails versenden.
+
+## Verbindliche Regeln
+
+- Kanonische Domain ist `https://edunewsletter.de`.
+- Quellen-URLs und Zusammenfassungen sind Pflichtfelder.
+- Materialeinträge benötigen Fach, Klassenstufe, Materialtyp, Lizenz und Zugangsangaben.
+- Doppelte URLs innerhalb einer Ausgabe werden abgewiesen.
+- Vor Veröffentlichung und Versand ist eine menschliche Prüfung erforderlich.
+
+Weitere Einzelheiten stehen im [Agentenvertrag](docs/agent-contract.md) und im [Publishing-Workflow](docs/publishing-workflow.md).
+
+## Öffentliche Sicherheit
+
+Dieses Repository ist öffentlich. Zugangsdaten, personenbezogene Abonnentendaten, private Kontaktinformationen und interne Infrastrukturwerte dürfen nicht eingecheckt oder archiviert werden.
+
+```bash
+npm run check:public
+```
+
+Der Check durchsucht alle Repository-Dateien nach typischen Schlüsseln, Tokens, privaten Schlüsseln, Zugangsdaten in URLs, E-Mail-Adressen und Anschriften. Details stehen in [SECURITY.md](SECURITY.md).
