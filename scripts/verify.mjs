@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { validateAutomationReleaseJob } from './lib/automation-release.mjs';
 import { ROOT, ghostDraftPayload, readIssue, renderHtml, renderMarkdown, validateIssue } from './lib/newsletter.mjs';
 import { scanRepository } from './lib/public-safety.mjs';
 
@@ -42,6 +43,40 @@ assert.ok(
   'Artikel innerhalb einer Kategorie müssen nach Datum absteigend sortiert sein',
 );
 
+const automationIssue = await readIssue(path.join(ROOT, 'examples', 'edu-example.json'));
+const automationHash = 'a'.repeat(64);
+const automationJob = {
+  schemaVersion: 1,
+  jobId: '6b2558be-f7fb-42ba-9f40-84257b48e14f',
+  action: 'create_release_artifacts',
+  newsletterNo: automationIssue.issueNumber,
+  versionNo: 1,
+  contentHash: automationHash,
+  idempotencyKey:
+    `${automationIssue.issueNumber}:1:create_release_artifacts:${automationHash}`,
+  callbackToken: 'test-only-callback-token-with-safe-length',
+  payload: {
+    issue: automationIssue,
+    version: {
+      newsletterNo: automationIssue.issueNumber,
+      versionNo: 1,
+      contentHash: automationHash,
+    },
+  },
+};
+assert.deepEqual(
+  validateAutomationReleaseJob(automationJob),
+  [],
+  'Ein vollständiger n8n-Artefaktjob muss valide sein',
+);
+assert.ok(
+  validateAutomationReleaseJob({
+    ...automationJob,
+    contentHash: 'b'.repeat(64),
+  }).some((error) => error.includes('idempotencyKey')),
+  'Ein abweichender Inhaltshash muss den Idempotenzvertrag verletzen',
+);
+
 assert.deepEqual(await scanRepository(ROOT), [], 'Repository darf keine erkannten sensiblen Informationen enthalten');
 
-console.log('Verifikation erfolgreich: Schema-Regeln, beide Rendererprofile und Draft-Schutz funktionieren.');
+console.log('Verifikation erfolgreich: Schema-Regeln, n8n-Vertrag, beide Rendererprofile und Draft-Schutz funktionieren.');

@@ -10,6 +10,7 @@
     "verify": "node scripts/verify.mjs",
     "check:public": "node scripts/check-public-safety.mjs",
     "validate:edu": "node scripts/validate-issue.mjs examples/edu-example.json",
-    "validate:material": "node scripts/validate-issue.mjs examples/material-example.json"
+    "validate:material": "node scripts/validate-issue.mjs examples/material-example.json",
+    "validate:automation": "node scripts/validate-automation-release.mjs"
   }
 }

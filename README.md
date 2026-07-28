@@ -29,6 +29,13 @@ node scripts/validate-issue.mjs examples/edu-example.json
 node scripts/render-issue.mjs examples/edu-example.json --html /tmp/edu.html --markdown /tmp/edu.md
 ```
 
+Ein n8n-Artefaktjob kann vor dem Staging-Lauf gegen denselben
+Publishing-Vertrag geprüft werden:
+
+```bash
+npm run validate:automation -- /path/to/release-job.json
+```
+
 ## Ghost-Entwurf erstellen
 
 Die Zugangsdaten werden nur über Umgebungsvariablen eingelesen:
@@ -49,7 +56,9 @@ Der Publisher erzwingt `status: draft`. Er kann weder veröffentlichen noch E-Ma
 - Doppelte URLs innerhalb einer Ausgabe werden abgewiesen.
 - Vor Veröffentlichung und Versand ist eine menschliche Prüfung erforderlich.
 
-Weitere Einzelheiten stehen im [Agentenvertrag](docs/agent-contract.md) und im [Publishing-Workflow](docs/publishing-workflow.md).
+Weitere Einzelheiten stehen im [Agentenvertrag](docs/agent-contract.md), im
+[Publishing-Workflow](docs/publishing-workflow.md) und im
+[n8n-Übergabevertrag](docs/n8n-integration.md).
 
 ## Öffentliche Sicherheit
 
